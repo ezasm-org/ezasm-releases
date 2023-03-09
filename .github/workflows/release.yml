@@ -19,7 +19,7 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Build with Maven
-        run: mvn --batch-mode --update-snapshots clean package
+        run: mvn -B -U package
       - name: Move artifact
         id: stage
         run: |
@@ -29,13 +29,13 @@ jobs:
           VERSION="${BASE_NAME#${ID}-}"
           PKG_NAME="${BASE_NAME}-mac.pkg"
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
-          echo "pkg_name=${BASE_NAME}-" >> $GITHUB_OUTPUT
+          echo "pkg_name=${PKG_NAME}-" >> $GITHUB_OUTPUT
           mkdir staging
           cp "./target/${BASE_NAME}-full.jar" "./staging/${PKG_NAME}"
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          release_name: EzASM-${{ steps.stage.outputs.version }}
+          name: EzASM-${{ steps.stage.outputs.version }}
           tag_name: v${{ steps.stage.outputs.version }}
           files: |
             ./staging/${{ steps.stage.outputs.pkg_name }}
