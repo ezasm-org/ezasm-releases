@@ -1,0 +1,43 @@
+name: Release
+
+on: 
+  workflow_dispatch:
+
+jobs:
+  release-macosx:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout EzASM
+        uses: actions/checkout@v3
+        with:
+          repository: 'TrevorBrunette/EzASM'
+          github-server-url: 'https://github.com'
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+      - name: Build with Maven
+        run: mvn --batch-mode --update-snapshots clean package
+      - name: Get version with Maven
+        run: |
+          VERSION=$(mvn --batch-mode clean org.apache.maven.plugins:maven-help-plugin:3.3.0:evaluate -Dexpression=project.version | grep -Ev '(^\[|Download\w+:)')
+        id: get_version
+      - name: Move artifact
+        id: stage
+        run: |
+          mkdir staging
+          ID="EzASM"
+          FULL_JAR_NAME="$(basename $(find target -name "${ID}*-full.jar"))"
+          BASE_NAME="${FULL_JAR_NAME%-full.jar}" # removes "-full.jar"
+          VERSION="${BASE_NAME#${ID}-}"
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+          cp "target/${ID}-*.pkg" "staging/${BASE_NAME}-mac.pkg"
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag_name: EzASM-${{ steps.stage.outputs.version }}
+          files: staging/*
+          
