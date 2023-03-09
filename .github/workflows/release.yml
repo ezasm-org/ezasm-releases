@@ -29,7 +29,7 @@ jobs:
         run: |
           mkdir staging
           ID="EzASM"
-          FULL_JAR_NAME="$(basename $(find target -name "${ID}*-full.jar"))"
+          FULL_JAR_NAME="$(basename $(find target -name ${ID}*-full.jar))"
           BASE_NAME="${FULL_JAR_NAME%-full.jar}" # removes "-full.jar"
           VERSION="${BASE_NAME#${ID}-}"
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
