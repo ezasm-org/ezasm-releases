@@ -29,15 +29,14 @@ jobs:
         run: |
           mkdir staging
           ID="EzASM"
-          FULL_JAR_NAME="$(basename $(find target -name ${ID}*-full.jar))"
-          BASE_NAME="${FULL_JAR_NAME%-full.jar}" # removes "-full.jar"
+          FULL_JAR_NAME="$(basename $(find target -name '*-full.jar'))"
+          BASE_NAME="${FULL_JAR_NAME%-full.jar}"
           VERSION="${BASE_NAME#${ID}-}"
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
           cp "target/${ID}-*.pkg" "staging/${BASE_NAME}-mac.pkg"
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
           tag_name: EzASM-${{ steps.stage.outputs.version }}
           files: staging/*
           
