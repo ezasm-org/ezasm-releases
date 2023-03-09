@@ -24,19 +24,21 @@ jobs:
         id: stage
         run: |
           mkdir staging
-          OUTPUT=$(mvn --batch-mode clean org.apache.maven.plugins:maven-help-plugin:3.3.0:evaluate -Dexpression=project.build.outputDirectory | grep -Ev '(^\[|Download\w+:)')
-          echo $OUTPUT
           echo $(pwd)
           echo $(ls)
           ID="EzASM"
-          FULL_JAR_NAME="$(basename $(find ${OUTPUT} -name '*-full.jar'))"
+          FULL_JAR_NAME="$(basename $(find target -name '*-full.jar'))"
           BASE_NAME="${FULL_JAR_NAME%-full.jar}"
           VERSION="${BASE_NAME#${ID}-}"
+          PKG_NAME="${BASE_NAME}-mac.pkg"
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
-          cp "${OUTPUT}/${ID}-*.pkg" "staging/${BASE_NAME}-mac.pkg"
+          echo "pkg_name=${BASE_NAME}-" >> $GITHUB_OUTPUT
+          cp "./target/${BASE_NAME}*-full.jar" "./staging/${PKG_NAME}"
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: EzASM-${{ steps.stage.outputs.version }}
-          files: staging/*
+          release_name: EzASM-${{ steps.stage.outputs.version }}
+          tag_name: v${{ steps.stage.outputs.version }}
+          files: |
+            ./staging/{{ steps.stage.outputs.pkg_name }}
           
