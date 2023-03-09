@@ -27,6 +27,7 @@ jobs:
       - name: Move artifact
         id: stage
         run: |
+          echo "$(pwd)" "$(ls)"
           mkdir staging
           ID="EzASM"
           FULL_JAR_NAME="$(basename $(find target -name '*-full.jar'))"
