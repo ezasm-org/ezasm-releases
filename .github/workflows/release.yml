@@ -20,21 +20,20 @@ jobs:
           cache: maven
       - name: Build with Maven
         run: mvn --batch-mode --update-snapshots clean package
-      - name: Get version with Maven
-        run: |
-          VERSION=$(mvn --batch-mode clean org.apache.maven.plugins:maven-help-plugin:3.3.0:evaluate -Dexpression=project.version | grep -Ev '(^\[|Download\w+:)')
-        id: get_version
       - name: Move artifact
         id: stage
         run: |
-          echo "$(pwd)" "$(ls)"
           mkdir staging
+          OUTPUT=$(mvn --batch-mode clean org.apache.maven.plugins:maven-help-plugin:3.3.0:evaluate -Dexpression=project.build.outputDirectory | grep -Ev '(^\[|Download\w+:)')
+          echo $OUTPUT
+          echo $(pwd)
+          echo $(ls)
           ID="EzASM"
-          FULL_JAR_NAME="$(basename $(find target -name '*-full.jar'))"
+          FULL_JAR_NAME="$(basename $(find ${OUTPUT} -name '*-full.jar'))"
           BASE_NAME="${FULL_JAR_NAME%-full.jar}"
           VERSION="${BASE_NAME#${ID}-}"
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
-          cp "target/${ID}-*.pkg" "staging/${BASE_NAME}-mac.pkg"
+          cp "${OUTPUT}/${ID}-*.pkg" "staging/${BASE_NAME}-mac.pkg"
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
