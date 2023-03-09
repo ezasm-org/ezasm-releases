@@ -30,6 +30,7 @@ jobs:
           PKG_NAME="${BASE_NAME}-mac.pkg"
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
           echo "pkg_name=${BASE_NAME}-" >> $GITHUB_OUTPUT
+          mkdir staging
           cp "./target/${BASE_NAME}-full.jar" "./staging/${PKG_NAME}"
       - name: Release
         uses: softprops/action-gh-release@v1
