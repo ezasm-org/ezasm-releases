@@ -30,7 +30,8 @@ jobs:
         id: stage
         run: |
           $ID="EzASM"
-          $FULL_JAR_NAME="$(basename $(find target -name '*-full.jar'))"
+          $PATH_TO_FULL=$(ls **\\*-full.jar)
+          $FULL_JAR_NAME="$(basename $PATH_TO_FULL)"
           $BASE_NAME="$FULL_JAR_NAME" -replace '-full.jar', ''
           $VERSION="$BASE_NAME" -replace "$ID-", ''
           $EXE_NAME="$BASE_NAME" + '-windows.exe'
