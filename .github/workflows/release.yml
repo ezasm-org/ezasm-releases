@@ -24,10 +24,6 @@ jobs:
         uses: crazy-max/ghaction-chocolatey@v2
         with:
           args: install innosetup --no-progress
-      - name: Download JDK
-        run: |
-          curl -L https://download.oracle.com/java/17/archive/jdk-17.0.6_windows-x64_bin.zip -O
-          tar -xf jdk*.zip --directory jdk/
       - name: Build with Maven
         run: mvn -B -U package
       - name: Move artifact
@@ -70,10 +66,6 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: maven
-      - name: Download JDK
-        run: |
-          curl -L https://download.oracle.com/java/17/archive/jdk-17.0.6_macos-x64_bin.tar.gz -O
-          tar -xf jdk*.tar.gz --directory jdk/
       - name: Build with Maven
         run: mvn -B -U package
       - name: Move artifact
@@ -114,11 +106,7 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          cache: maven
-      - name: Download JDK
-        run: |
-          curl -L https://download.oracle.com/java/17/archive/jdk-17.0.6_linux-x64_bin.tar.gz -O
-          tar -xf jdk*all.tar.gz --directory jdk/
+          cache: maven  
       - name: Build with Maven
         run: mvn -B -U package
       - name: Move artifact
@@ -137,11 +125,13 @@ jobs:
           echo "deb_name=${DEB_NAME}" >> $GITHUB_OUTPUT
           echo "rpm_name=${RPM_NAME}" >> $GITHUB_OUTPUT
           echo "tar_name=${TAR_NAME}" >> $GITHUB_OUTPUT
+          echo "full_name=${FULL_JAR_NAME}" >> $GITHUB_OUTPUT
           mkdir staging
           cp ./target/${ID}.AppImage "./staging/${APPIMAGE_NAME}"
           cp ./target/${ID}_*.deb "./staging/${DEB_NAME}"
           cp ./target/${ID}_*.rpm "./staging/${RPM_NAME}"
           cp ./target/${ID}-*.tar.gz "./staging/${TAR_NAME}"
+          cp ./target/${FULL_JAR_NAME} "./staging/${FULL_JAR_NAME}"
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
@@ -149,6 +139,7 @@ jobs:
           tag_name: v${{ steps.stage.outputs.version }}
           files: |
             ./staging/${{ steps.stage.outputs.appimage_name }}
-            ./staging/${{ steps.stage.outputs.rpm_name }}
+            ./staging/${{ steps.stage.outputs.rpm_name }} 
             ./staging/${{ steps.stage.outputs.deb_name }}
             ./staging/${{ steps.stage.outputs.tar_name }}
+            ./staging/${{ steps.stage.outputs.full_name }}
