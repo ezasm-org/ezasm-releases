@@ -79,7 +79,7 @@ jobs:
           DMG_NAME="${BASE_NAME}-mac.dmg"
           TAR_NAME="${BASE_NAME}-mac.tar.gz"
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
-          echo "dmg_name=${PKG_NAME}" >> $GITHUB_OUTPUT
+          echo "dmg_name=${DMG_NAME}" >> $GITHUB_OUTPUT
           echo "tar_name=${TAR_NAME}" >> $GITHUB_OUTPUT
           mkdir staging
           cp ./target/${ID}_*.dmg "./staging/${DMG_NAME}"
