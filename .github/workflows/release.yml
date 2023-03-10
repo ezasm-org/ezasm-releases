@@ -75,20 +75,20 @@ jobs:
           FULL_JAR_NAME="$(basename $(find target -name '*-full.jar'))"
           BASE_NAME="${FULL_JAR_NAME%-full.jar}"
           VERSION="${BASE_NAME#${ID}-}"
-          PKG_NAME="${BASE_NAME}-mac.pkg"
+          DMG_NAME="${BASE_NAME}-mac.dmg"
           TAR_NAME="${BASE_NAME}-mac.tar.gz"
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
-          echo "pkg_name=${PKG_NAME}" >> $GITHUB_OUTPUT
+          echo "dmg_name=${PKG_NAME}" >> $GITHUB_OUTPUT
           echo "tar_name=${TAR_NAME}" >> $GITHUB_OUTPUT
           mkdir staging
-          cp ./target/${ID}_*.pkg "./staging/${PKG_NAME}"
+          cp ./target/${ID}_*.dmg "./staging/${DMG_NAME}"
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
           name: EzASM-${{ steps.stage.outputs.version }}
           tag_name: v${{ steps.stage.outputs.version }}
           files: |
-            ./staging/${{ steps.stage.outputs.pkg_name }}
+            ./staging/${{ steps.stage.outputs.dmg_name }}
             ./staging/${{ steps.stage.outputs.tar_name }}
           
 
