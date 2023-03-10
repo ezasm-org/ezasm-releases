@@ -13,7 +13,7 @@ jobs:
         with:
           repository: 'TrevorBrunette/EzASM'
           github-server-url: 'https://github.com'
-          ref: my-branch
+          ref: native-launchers
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
@@ -26,8 +26,8 @@ jobs:
           args: install innosetup --no-progress
       - name: Download JDK
         run: |
-          curl -L https://www.dropbox.com/s/z4dh5h2of8yekkc/jdk-17.0.6-all.tar.gz?dl=1 -O
-          tar -xf jdk*all.tar.gz --directory jdk/
+          curl -L https://download.oracle.com/java/17/archive/jdk-17.0.6_windows-x64_bin.zip -O
+          tar -xf jdk*.zip --directory jdk/
       - name: Build with Maven
         run: mvn -B -U package
       - name: Move artifact
@@ -63,7 +63,7 @@ jobs:
         with:
           repository: 'TrevorBrunette/EzASM'
           github-server-url: 'https://github.com'
-          ref: my-branch
+          ref: native-launchers
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
@@ -72,8 +72,8 @@ jobs:
           cache: maven
       - name: Download JDK
         run: |
-          curl -L https://www.dropbox.com/s/z4dh5h2of8yekkc/jdk-17.0.6-all.tar.gz?dl=1 -O
-          tar -xf jdk*all.tar.gz --directory jdk/
+          curl -L https://download.oracle.com/java/17/archive/jdk-17.0.6_macos-x64_bin.tar.gz -O
+          tar -xf jdk*.tar.gz --directory jdk/
       - name: Build with Maven
         run: mvn -B -U package
       - name: Move artifact
@@ -108,7 +108,7 @@ jobs:
         with:
           repository: 'TrevorBrunette/EzASM'
           github-server-url: 'https://github.com'
-          ref: my-branch
+          ref: native-launchers
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
@@ -117,7 +117,7 @@ jobs:
           cache: maven
       - name: Download JDK
         run: |
-          curl -L https://www.dropbox.com/s/z4dh5h2of8yekkc/jdk-17.0.6-all.tar.gz?dl=1 -O
+          curl -L https://download.oracle.com/java/17/archive/jdk-17.0.6_linux-x64_bin.tar.gz -O
           tar -xf jdk*all.tar.gz --directory jdk/
       - name: Build with Maven
         run: mvn -B -U package
