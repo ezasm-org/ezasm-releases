@@ -82,7 +82,7 @@ jobs:
           echo "tar_name=${TAR_NAME}" >> $GITHUB_OUTPUT
           mkdir staging
           cp ./target/${ID}_*.dmg "./staging/${DMG_NAME}"
-          cp ./target/${ID}_*.tar.gz "./staging/${TAR_NAME}"
+          cp ./target/${ID}-*.tar.gz "./staging/${TAR_NAME}"
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
