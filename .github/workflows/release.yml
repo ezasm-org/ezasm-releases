@@ -29,19 +29,18 @@ jobs:
       - name: Move artifact
         id: stage
         run: |
-          $ID="EzASM"
-          $PATH_TO_FULL=$(ls **\\*-full.jar)
+          $PATH_TO_FULL=$(ls **\\EzASM-*-full.jar)
           $FULL_JAR_NAME="$(basename $PATH_TO_FULL)"
           $BASE_NAME="$FULL_JAR_NAME" -replace '-full.jar', ''
-          $VERSION="$BASE_NAME" -replace "$ID-", ''
+          $VERSION="$BASE_NAME" -replace "EzASM-", ''
           $EXE_NAME="$BASE_NAME" + '-windows.exe'
           $ZIP_NAME="$BASE_NAME" + '-windows.zip'
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "exe_name=$EXE_NAME" >> $GITHUB_OUTPUT
           echo "zip_name=$ZIP_NAME" >> $GITHUB_OUTPUT
           mkdir staging
-          cp ./target/$ID_*.exe "./staging/$EXE_NAME"
-          cp ./target/$ID-*.zip "./staging/$ZIP_NAME"
+          cp ./target/EzASM_*.exe "./staging/$EXE_NAME"
+          cp ./target/EzASM-*.zip "./staging/$ZIP_NAME"
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
