@@ -129,7 +129,7 @@ jobs:
           cp ./target/${ID}_*.deb "./staging/${DEB_NAME}"
           cp ./target/${ID}_*.rpm "./staging/${RPM_NAME}"
           cp ./target/${ID}-*.tar.gz "./staging/${TAR_NAME}"
-          cp ./target/${FULL_JAR_NAME} "./staging/${FULL_JAR_NAME}"
+          ./src/shell/combine_files.sh ./src/shell/stub.sh ./target/${FULL_JAR_NAME} "./staging/${FULL_JAR_NAME}"
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
