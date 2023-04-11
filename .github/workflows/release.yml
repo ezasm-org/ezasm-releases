@@ -124,6 +124,7 @@ jobs:
           echo "rpm_name=${RPM_NAME}" >> $GITHUB_OUTPUT
           echo "tar_name=${TAR_NAME}" >> $GITHUB_OUTPUT
           echo "full_name=${FULL_JAR_NAME}" >> $GITHUB_OUTPUT
+          echo "jar_sha256=$(sha256sum ${FULL_JAR_NAME} | cut -d " " -f1)" >> $GITHUB_OUTPUT
           mkdir staging
           cp ./target/${ID}.AppImage "./staging/${APPIMAGE_NAME}"
           cp ./target/${ID}_*.deb "./staging/${DEB_NAME}"
@@ -148,3 +149,4 @@ jobs:
           token: ${{ secrets.PAT }}
           repository: ezasm-org/homebrew-ezasm
           event-type: release
+          client-payload: '{"version": "${{ steps.stage.outputs.version }}", "jar_sha256": "${{ steps.stage.outputs.jar_sha256 }}"}'
