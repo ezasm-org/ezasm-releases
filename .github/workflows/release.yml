@@ -124,13 +124,13 @@ jobs:
           echo "rpm_name=${RPM_NAME}" >> $GITHUB_OUTPUT
           echo "tar_name=${TAR_NAME}" >> $GITHUB_OUTPUT
           echo "full_name=${FULL_JAR_NAME}" >> $GITHUB_OUTPUT
-          echo "jar_sha256=$(sha256sum ${FULL_JAR_NAME} | cut -d " " -f1)" >> $GITHUB_OUTPUT
           mkdir staging
           cp ./target/${ID}.AppImage "./staging/${APPIMAGE_NAME}"
           cp ./target/${ID}_*.deb "./staging/${DEB_NAME}"
           cp ./target/${ID}_*.rpm "./staging/${RPM_NAME}"
           cp ./target/${ID}-*.tar.gz "./staging/${TAR_NAME}"
           ./src/shell/combine_files.sh ./src/shell/stub.sh ./target/${FULL_JAR_NAME} "./staging/${FULL_JAR_NAME}"
+          echo "jar_sha256=$(sha256sum ./staging/${FULL_JAR_NAME} | cut -d " " -f1)" >> $GITHUB_OUTPUT
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
